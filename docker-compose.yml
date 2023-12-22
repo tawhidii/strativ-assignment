@@ -1,24 +1,24 @@
 version: '3.8'
 services:
   web:
-    build: .
-    command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    build: ./
+    command: uvicorn assignment.asgi:application --reload --workers 3 --host 0.0.0.0 --port 8000
     volumes:
-      - ./project:/usr/src/app
+      - ./:/usr/src/app
     ports:
       - 8005:8000
     environment:
-      - ENVIRONMENT=dev
-      - DATABASE_URL=postgres://postgres:postgres@web-db:5432/ai_imagine_dev?schema=user_manager
-      - DATABASE_TEST_URL=postgres://postgres:postgres@web-db:5432/ai_imagine_dev?schema=user_manager
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       
     depends_on:
       - web-db
   
   web-db:
-    build:
-      context: ./project/db
-      dockerfile: Dockerfile
+    image: postgres:14-alpine
     expose:
       - 5432
     ports:
@@ -26,3 +26,4 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    
