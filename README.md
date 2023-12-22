@@ -33,11 +33,11 @@ make seed
 
 ## API lists:
 
-- Get Coolest District:
+- Get Coolest District endpoint:
 
   - endpoint :`http://localhost:8005/tasks/coolest-districts/`
 
-- Get Coolest District:
+- Travel recommendation endpoint:
   - endpoint :`http://localhost:8005/tasks/tarvel-recomendation/`
     payload :
     {
