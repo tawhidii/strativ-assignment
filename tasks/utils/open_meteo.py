@@ -1,3 +1,4 @@
+import requests
 import asyncio
 import aiohttp
 import heapq
@@ -40,3 +41,22 @@ async def get_coolest_districts(districts):
         10, district_temperature, key=lambda x: x["minimum_temperature"]
     )
     return coolest_district
+
+
+def travel_recommender(location_lat_lon, destination_lat_lon, travel_date):
+    _location_response = requests.get(
+        API_ENDPOINT.format(
+            location_lat_lon["lat"], location_lat_lon["lon"], travel_date
+        )
+    )
+    _destination_response = requests.get(
+        API_ENDPOINT.format(
+            destination_lat_lon["lat"], destination_lat_lon["lon"], travel_date
+        )
+    )
+    location_min_temp = min(_location_response.json()["hourly"]["temperature_2m"])
+    destination_min_temp = min(_destination_response.json()["hourly"]["temperature_2m"])
+    if location_min_temp > destination_min_temp:
+        return {"message": "Dont Travel !"}
+    if destination_min_temp > location_min_temp:
+        return {"message": "Hurray !! You can travel !"}
